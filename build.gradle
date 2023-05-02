@@ -1,19 +1,43 @@
 plugins {
-    id 'java'
+    id 'application'
+    id 'org.beryx.runtime' version '1.12.7'
 }
 
-group 'cz.czechitas'
-version '1.0-SNAPSHOT'
+group = 'cz.czechitas'
+version = '1.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
 test {
     useJUnitPlatform()
+}
+
+application {
+    mainClass = "cz.czechitas.lekce12.Application"
+}
+
+runtime {
+    jpackage {
+        imageName = "Moje aplikace ${project.version}"
+        jpackage {
+            imageOptions = ["--icon", "src/main/resources/czechitas.icns"]
+        }
+    }
 }
